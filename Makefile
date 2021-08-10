@@ -12,6 +12,9 @@ build_%:
 Output/LPsolve/example_result.Rds:
 	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ bartoszbartmanski/carnival:2.2.0 /scripts/example.sh /output/
 
+Output/CPLEX/example_result.Rds:
+	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd):/output/ -v /opt/:/opt/ bartoszbartmanski/carnival:2.2.0 /output/Scripts/example_cplex.R /output/$(dir $@)
+
 .PHONY: push_%
 push_%:
 	docker push bartoszbartmanski/carnival:$*
