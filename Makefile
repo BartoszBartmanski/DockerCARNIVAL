@@ -7,10 +7,14 @@ all_examples: Output/LPsolve/example_result.Rds Output/CPLEX/example_result.Rds
 
 .PHONY: build_%
 build_%:
-	cd $* && docker build -t carnival:$* -f Dockerfile .
+	cd $* && docker build -t bartoszbartmanski/carnival:$* -f Dockerfile .
 
 Output/LPsolve/example_result.Rds:
-	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ carnival:2.2.0 /scripts/example.sh /output/
+	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ bartoszbartmanski/carnival:2.2.0 /scripts/example.sh /output/
+
+.PHONY: push_%
+push_%:
+	docker push bartoszbartmanski/carnival:$*
 
 .PHONY: clean_images
 clean_images:
