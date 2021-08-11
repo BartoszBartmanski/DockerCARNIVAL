@@ -2,25 +2,19 @@
 # DockerCARNIVAL
 
 Repository for [CARNIVAL](https://github.com/saezlab/CARNIVAL/)
-docker images based on Ubuntu 20.04. 
+docker images. 
 
 ## Build
 
 To create a new image:
 ```
-cd <version>
-docker build -t carnival:<version> -f Dockerfile .
-```
-For example:
-```
-cd 2.2.0
-docker build -t carnival:2.2.0 -f Dockerfile .
+docker build -t carnival:latest -f Dockerfile .
 ```
 
 ## Download
 
-To download an image:
-```
+To download an image from dockerhub:
+``` 
 docker pull bartoszbartmanski/carnival:<version>
 ```
 For example:
