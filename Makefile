@@ -1,22 +1,20 @@
 
-VERSIONS := $(patsubst %/Dockerfile,%,$(wildcard */Dockerfile))
-
-all: $(addprefix build_,${VERSIONS})
+all: build_latest
 
 all_examples: Output/LPsolve/example_result.Rds Output/CPLEX/example_result.Rds
 
-.PHONY: build_%
+.PHONY: build
 build_%:
-	cd $* && docker build -t bartoszbartmanski/carnival:$* -f Dockerfile .
+	docker build -t bartoszbartmanski/carnival:$* -f Dockerfile .
 
 Output/LPsolve/example_result.Rds:
-	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ bartoszbartmanski/carnival:2.2.0 /scripts/example.sh /output/
+	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ bartoszbartmanski/carnival:latest /scripts/example.sh /output/
 
 Output/CPLEX/example_result.Rds:
-	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd):/output/ -v /opt/:/opt/ bartoszbartmanski/carnival:2.2.0 /output/Scripts/example_cplex.R /output/$(dir $@)
+	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd):/output/ -v /opt/:/opt/ bartoszbartmanski/carnival:latest /output/Scripts/example_cplex.R /output/$(dir $@)
 
 .PHONY: push_%
-push_%:
+push_%: build_%
 	docker push bartoszbartmanski/carnival:$*
 
 .PHONY: clean_images
