@@ -13,7 +13,7 @@ docker build -t carnival:latest -f Dockerfile .
 
 ## Download
 
-To download an image from dockerhub:
+To download an image from [dockerhub](https://hub.docker.com/repository/docker/bartoszbartmanski/carnival):
 ``` 
 docker pull bartoszbartmanski/carnival:<version>
 ```
