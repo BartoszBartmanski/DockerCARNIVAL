@@ -1,8 +1,7 @@
 
 # DockerCARNIVAL
 
-Repository for [CARNIVAL](https://github.com/saezlab/CARNIVAL/)
-docker images. 
+Repository for building a docker image of [CARNIVAL](https://github.com/saezlab/CARNIVAL/).
 
 ## Build
 
