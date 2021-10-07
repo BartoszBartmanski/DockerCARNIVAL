@@ -8,20 +8,23 @@ load(file = system.file("toy_inputs_ex1.RData", package="CARNIVAL"))
 load(file = system.file("toy_measurements_ex1.RData", package="CARNIVAL"))
 load(file = system.file("toy_network_ex1.RData", package="CARNIVAL"))
 
-# lpSolve
 # path_to_cplex <- system("which cplex", intern=TRUE)
-path_to_cplex <- "/opt/ibm/ILOG/CPLEX_Studio201/cplex/bin/x86-64_linux/cplex"
-output_dir <- args[1]
+if (length(args) < 3) {
+    print("Need to specify solver, path to solver and output path")
+    stop(1)
+}
+solver <- args[1]
+path_to_solver <- args[2]
+output_path <- args[3]
 
-print(path_to_cplex)
-dir.create(output_dir, showWarnings=F)
+print(args)
 
-result = runCARNIVAL(solver = "cplex",
-                     solverPath = path_to_cplex,
+result = runCARNIVAL(solver = solver,
+                     solverPath = path_to_solver,
                      inputObj = toy_inputs_ex1,
                      measObj = toy_measurements_ex1,
                      netObj = toy_network_ex1,
-                     dir_name=output_dir)
+                     dir_name = dirname(output_path))
 print(result)
 
-saveRDS(result, paste0(output_dir, "/example_result.Rds"))
+saveRDS(result, output_path)

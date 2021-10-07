@@ -5,17 +5,17 @@ LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.vendor="Test" \
       org.opencontainers.image.authors="Bartosz Bartmanski"
 
-ENV RENV_VERSION 0.14.0
-RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+WORKDIR /example/
 
-WORKDIR /scripts/
-
-COPY renv.lock renv.lock
 COPY gen_igraph_input.R gen_igraph_input.R
 COPY run_carnival.R run_carnival.R
-COPY carnival_example.json carnival_example.json
-COPY example.sh example.sh
+COPY other_solvers.R other_solvers.R
+COPY lp_solve.json lp_solve.json
+COPY run_example.sh run_example.sh
 
-RUN R -e "renv::restore()"
+RUN apt -y update
+RUN apt -y install libhdf5-dev graphviz git
+RUN R -e "install.packages(c('remotes', 'BiocManager', 'igraph', 'stringi'), repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "BiocManager::install('rhdf5')"
+RUN R -e "remotes::install_github('saezlab/CARNIVAL', ref='963fbc1db2d038bfeab76abe792416908327c176')"
 

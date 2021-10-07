@@ -1,4 +1,6 @@
 
+cplex_path := $(dir $(shell which cplex))
+
 all: build_latest
 
 all_examples: Output/LPsolve/example_result.Rds Output/CPLEX/example_result.Rds
@@ -7,11 +9,11 @@ all_examples: Output/LPsolve/example_result.Rds Output/CPLEX/example_result.Rds
 build_%:
 	docker build -t bartoszbartmanski/carnival:$* -f Dockerfile .
 
-Output/LPsolve/example_result.Rds:
-	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd)/$(dir $@):/output/ bartoszbartmanski/carnival:latest /scripts/example.sh /output/
+example_result.Rds:
+	docker run -it -v `pwd`:/data/ --rm bartoszbartmanski/carnival:latest /example/run_example.sh /data/
 
-Output/CPLEX/example_result.Rds:
-	mkdir -p $(dir $@) && docker run -it --rm -v $$(pwd):/output/ -v /opt/:/opt/ bartoszbartmanski/carnival:latest /output/Scripts/example_cplex.R /output/$(dir $@)
+cplex_example.Rds:
+	docker run -it --rm -v `pwd`:/data/ -v ${cplex_path}:${cplex_path} bartoszbartmanski/carnival:latest /example/other_solvers.R cplex ${cplex_path}/cplex /data/$@
 
 .PHONY: push_%
 push_%: build_%
@@ -21,7 +23,6 @@ push_%: build_%
 clean_images:
 	docker images -a | grep "carnival" | awk '{print $$3}' | xargs docker rmi
 
-.PHONY: clean
 clean:
-	rm -rf Output/
+	rm -f *.RData *.lp *.h5 *.dot *.Rds *.txt *.sol *.log
 
